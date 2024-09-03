@@ -1,0 +1,122 @@
+package com.mph.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.mph.model.Employee;
+import com.mph.util.MyDbConnection;
+
+public class EmployeeDaoImpl implements EmployeeDao{
+    Connection  con;
+    Statement stmt;
+    PreparedStatement ps;
+    ResultSet rs;
+    List<Employee> emplist;
+    Employee empl;
+	@Override
+	public boolean addEmployee(Employee e) {
+         boolean flag=false;
+         String s="insert into mphemp values(?,?,?,?)";
+         con=MyDbConnection.getDbConnection();
+         try {
+			ps=con.prepareStatement(s);
+			ps.setInt(1, e.getEid());
+			ps.setString(2,e.getEname());
+			ps.setString(3,e.getAddress());
+			ps.setString(4,e.getDept());
+			int noofrows=ps.executeUpdate();
+			System.out.println(noofrows+" inserted successfully!!");
+			flag=true;
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+         
+		return flag;
+	}
+
+	@Override
+	public List<Employee> getAllEmployees() {
+	   try {
+		   con=MyDbConnection.getDbConnection();
+		   emplist= new ArrayList<Employee>();
+		   stmt=con.createStatement();
+		   rs=stmt.executeQuery("select * from mphemp");
+		   while(rs.next()) {
+			   empl=new Employee();
+			   empl.setEid(rs.getInt(1));
+			   empl.setEname(rs.getString(2));
+			   empl.setAddress(rs.getString(3));
+			   empl.setDept(rs.getString(4));
+			   emplist.add(empl);
+		   }
+	   }catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return emplist;
+	}
+
+	@Override
+	public Employee getAEmployee(int eno) {
+		 try {
+			   con=MyDbConnection.getDbConnection();
+			   stmt=con.createStatement();
+			   rs=stmt.executeQuery("select * from mphemp where eid="+eno);
+			   while(rs.next()) {
+				   empl=new Employee();
+				   empl.setEid(rs.getInt(1));
+				   empl.setEname(rs.getString(2));
+				   empl.setAddress(rs.getString(3));
+				   empl.setDept(rs.getString(4));
+				  
+			   }
+		   }catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		 return empl;
+	}
+
+	@Override
+	public boolean updateEmployee(Employee e) {
+		boolean flag=false;
+		 try {
+			   con=MyDbConnection.getDbConnection();
+			   String sql="update mphemp set ename=?,address=?,dep=? where eid ="+e.getEid();
+			   ps=con.prepareStatement(sql);
+			   ps.setString(1, e.getEname());
+			   ps.setString(2, e.getAddress());
+			   ps.setString(3, e.getDept());
+			   int noofrows=ps.executeUpdate();
+				System.out.println(noofrows+" updated successfully!! with id: "+e.getEid());
+				flag=true;
+		 }catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		return flag;
+	}
+
+	@Override
+	public boolean deleteEmployee(int eno) {
+		boolean flag=false;
+		 try {
+			   con=MyDbConnection.getDbConnection();
+			   String sql="delete from mphemp where eid ="+eno;
+			   ps=con.prepareStatement(sql);
+			   int noofrows=ps.executeUpdate();
+				System.out.println(noofrows+" delete successfully!! with empno: "+eno);
+				flag=true;
+		 }catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+		return flag;
+	}
+
+}
