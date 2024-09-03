@@ -1,0 +1,100 @@
+package com.mph.controller;
+
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
+
+import com.mph.dao.EmployeeDao;
+import com.mph.dao.EmployeeDaoImpl;
+import com.mph.model.Employee;
+
+@WebServlet("/EC")
+public class EmployeeController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+ EmployeeDao dao=new EmployeeDaoImpl();
+ RequestDispatcher rd;
+    public EmployeeController() {
+        super();
+        
+    }
+
+	
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		String action=request.getParameter("action");
+		switch (action) {
+		case "LIST": {
+			listEmployee(request,response);
+			break;
+			
+		}
+		case "SEARCH": {
+			searchEmployee(request,response);
+			break;
+			
+		}
+		case "EDIT": {
+			editEmployee(request,response);
+			break;
+			
+		}
+		case "DELETE": {
+			deleteEmployee(request,response);
+			break;
+			
+		}
+		default:{
+			listEmployee(request,response);
+			break;}
+		}
+	}
+
+	private void deleteEmployee(HttpServletRequest request, HttpServletResponse response) {
+		
+		
+	}
+
+
+	private void editEmployee(HttpServletRequest request, HttpServletResponse response) {
+	
+		
+	}
+
+
+	private void searchEmployee(HttpServletRequest request, HttpServletResponse response) {
+		
+		
+	}
+
+
+	private void listEmployee(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		List<Employee> emplist= dao.getAllEmployees();
+		request.setAttribute("allemp", emplist);
+		rd= request.getRequestDispatcher("employee-list.jsp");
+		rd.forward(request, response);
+		
+	}
+
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		addEmployee(request, response);
+	}
+
+
+	private void addEmployee(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Employee emp=new Employee();
+		emp.setEid(Integer.parseInt(request.getParameter("txteid")));
+		emp.setEname(request.getParameter("txtename"));
+		emp.setAddress(request.getParameter("txtaddr"));
+		emp.setDept(request.getParameter("txtdept"));
+		dao.addEmployee(emp);
+		listEmployee(request, response);
+	}
+
+}
