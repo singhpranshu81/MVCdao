@@ -66,8 +66,12 @@ public class EmployeeController extends HttpServlet {
 	}
 
 
-	private void searchEmployee(HttpServletRequest request, HttpServletResponse response) {
-		
+	private void searchEmployee(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		int eid=Integer.parseInt( request.getParameter("eid"));
+		Employee emp=dao.getAEmployee(eid);
+		request.setAttribute("aemp", emp);
+		rd= request.getRequestDispatcher("show-a-employee.jsp");
+		rd.forward(request, response);
 		
 	}
 
