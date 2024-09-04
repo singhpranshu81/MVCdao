@@ -1,0 +1,33 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1" import="com.mph.model.Employee" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Employee find</title>
+</head>
+<body>
+Employee details here ..
+<%
+    Employee emp=(Employee)request.getAttribute("aemp");
+%>
+<table style="text-align: center;  margin-left: auto;
+    margin-right: auto;" border="1" width="50%">
+    <caption>Employee Data</caption>
+   <tr>
+   <th>Emp ID</th>
+   <th>Ename</th>
+   <th>Address</th>
+   <th>Dept</th>
+   </tr>
+  <tr>
+  <td><%=emp.getEid() %></td>
+   <td><%=emp.getEname() %></td>
+    <td><%=emp.getAddress() %></td>
+     <td><%=emp.getDept() %></td>
+ 
+			</tr>
+  
+   </table>
+</body>
+</html>
